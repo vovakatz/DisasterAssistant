@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
+
 from app.services.sample_service import SampleService
 from app.models.sample import SampleResponse
 
