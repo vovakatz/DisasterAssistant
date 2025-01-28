@@ -1,4 +1,4 @@
-from app.models.scrape_response import ScrapeResponse
+from app.models.scrape import ScrapeResponse
 from crawl4ai import *
 
 class ScrapeService:
@@ -7,7 +7,6 @@ class ScrapeService:
             result = await crawler.arun(
                 url=url,
             )
-            print(result.markdown)
             return ScrapeResponse(content=result.markdown)
 
 
