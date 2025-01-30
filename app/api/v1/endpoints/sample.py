@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from app.services.sample_service import SampleService
-from app.models.sample import SampleResponse
+from app.models.sample_response import SampleResponse
 
 router = APIRouter()
 

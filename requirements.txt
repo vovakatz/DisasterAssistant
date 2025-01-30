@@ -1,6 +1,7 @@
-fastapi
+fastapi~=0.115.7
 uvicorn
-pydantic
+pydantic~=2.10.6
 python-dotenv
 pytest
-crawl4ai
+openai~=1.60.2
+pg8000
