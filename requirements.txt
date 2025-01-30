@@ -5,3 +5,4 @@ python-dotenv
 pytest
 openai~=1.60.2
 pg8000
+jinja2
