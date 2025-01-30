@@ -51,6 +51,7 @@ class AssistantService:
                 message="System experienced an issue, please try again."
             )
 
+    #TODO: make it async.
     def save_q_and_a(self, thread_id, question, answer: str):
         try:
             db = NeonDatabase()
