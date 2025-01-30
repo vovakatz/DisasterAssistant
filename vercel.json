@@ -1,4 +1,9 @@
 {
+  "functions": {
+    "*.{js,ts,go,py,rb}" : {
+      "maxDuration": 60
+    }
+  },
   "builds": [
     {
       "src": "app/main.py",
