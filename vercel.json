@@ -1,6 +1,6 @@
 {
   "functions": {
-    "*.{js,ts,go,py,rb}" : {
+    "app/main.py" : {
       "maxDuration": 60
     }
   },
