@@ -25,7 +25,7 @@ class NeonDatabase:
             self.conn.close()
             print("Database connection closed")
 
-    def add_record(self, table_name: str, data: Dict) -> bool:
+    def add_record(self, table_name: str, data: Dict) -> bool|None:
         if not self.conn:
             self.connect()
 
