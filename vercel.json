@@ -12,7 +12,7 @@
     }
   ],
   "functions": {
-    "app/**/*": {
+    "app/main.py": {
       "maxDuration": 60
     }
   }
