@@ -3,11 +3,11 @@ from typing import Optional
 from app import services
 from app.models.assistant_response import AssistantResponse
 from app.models.chat_response import ChatResponse
-from app.store.neon_db import NeonDatabase
+from app.store.assistant import AssistantStore
 
 
 class AssistantService:
-    def get_assistant_response(self, question: str, thread_id: Optional[str]):
+    async def get_assistant_response(self, question: str, thread_id: Optional[str]):
         if not thread_id:
             thread = services.client.beta.threads.create(
                 messages=[
@@ -38,7 +38,7 @@ class AssistantService:
             print(messages)
             chat = ChatResponse.from_dict(messages.model_dump_json())
 
-            self.save_q_and_a(thread_id, question,chat.data[0].content[0].text.value)
+            await AssistantStore().save_q_and_a(thread_id, question,chat.data[0].content[0].text.value)
 
             return AssistantResponse(
                 thread_id=thread_id,
@@ -50,17 +50,3 @@ class AssistantService:
                 thread_id=thread_id,
                 message="System experienced an issue, please try again."
             )
-
-    #TODO: make it async.
-    def save_q_and_a(self, thread_id, question, answer: str):
-        try:
-            db = NeonDatabase()
-            data = {
-                "thread_id": thread_id,
-                "question": question,
-                "answer": answer,
-            }
-
-            db.add_record("q_and_a", data)
-        except Exception as ex:
-            print(ex)

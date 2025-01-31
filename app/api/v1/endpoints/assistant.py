@@ -9,4 +9,4 @@ router = APIRouter()
 @router.post("/assistant", response_model=AssistantResponse)
 async def get_sample(r: QuestionRequest):
     service = AssistantService()
-    return service.get_assistant_response(r.question, r.thread_id)
+    return await service.get_assistant_response(r.question, r.thread_id)
