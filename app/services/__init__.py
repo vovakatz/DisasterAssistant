@@ -3,8 +3,9 @@ import os
 from fastapi import FastAPI
 from openai import OpenAI
 
-app = FastAPI()
+from app.core.config import settings
+
 client = OpenAI(
-    api_key=os.environ.get('OPENAI_API_KEY'),
-    project="proj_gLqeI29UOxol45PyQiFT5jAN",
+    api_key=settings.OPENAI_API_KEY,
+    project=settings.PROJECT_ID,
 )

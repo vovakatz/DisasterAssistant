@@ -1,6 +1,7 @@
 import io
 import time
 
+from app.core.config import settings
 from app.models.scrape_response import ScrapeResponse
 from crawl4ai import *
 
@@ -20,7 +21,7 @@ class ScrapeService:
             if len(result.markdown) == 0:
                 raise ValueError("Crawler returned empty content")
 
-            self.add_file_to_assistant(result.markdown, "sample_file_1.md", "asst_sh3cHFY9moqlcjt8wvW5ZqMa")
+            self.add_file_to_assistant(result.markdown, "sample_file_1.md", settings.ASSISTANT_ID)
             return ScrapeResponse(content=result.markdown)
 
     def add_file_to_assistant(self, file_content, filename, assistant_id):
@@ -33,7 +34,7 @@ class ScrapeService:
         )
         file_id = file_response.id
 
-        vector_store_id = 'vs_9sVchxI3emlMflZKdohp7aJ5'
+        vector_store_id = settings.VECTOR_STORE_ID
 
         # Add the file to the vector store
         batch_response = client.beta.vector_stores.file_batches.create(
