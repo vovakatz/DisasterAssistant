@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Scraper</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+    <!-- Updated Lucide import -->
+    <script src="https://unpkg.com/@lucide/lucide@latest"></script>
+</head>
+<body>
+    <div id="root"></div>
+    {% raw %}
+    <script type="text/babel">
+        function ScrapeForm() {
+            const [url, setUrl] = React.useState('');
+            const [content, setContent] = React.useState('');
+            const [message, setMessage] = React.useState({ text: '', type: '' });
+            const [isLoading, setIsLoading] = React.useState(false);
+
+            const handleScrape = async (e) => {
+                e.preventDefault();
+                setIsLoading(true);
+                setMessage({ text: '', type: '' });
+
+                try {
+                    const response = await fetch(`/api/v1/scrape?url=${url}`, {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json' },
+                    });
+                    
+                    if (!response.ok) throw new Error('Scraping failed');
+                    
+                    const data = await response.json();
+                    setContent(data.content);
+                } catch (error) {
+                    setMessage({ text: 'Failed to scrape URL', type: 'error' });
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+                setIsLoading(true);
+                setMessage({ text: '', type: '' });
+
+                try {
+                    const response = await fetch('/submit', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url, content })
+                    });
+                    
+                    if (!response.ok) throw new Error('Submission failed');
+                    
+                    setMessage({ text: 'Successfully submitted!', type: 'success' });
+                    setUrl('');
+                    setContent('');
+                } catch (error) {
+                    setMessage({ text: 'Failed to submit content', type: 'error' });
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+
+            // Set up marked options
+            marked.setOptions({
+                breaks: true,
+                gfm: true
+            });
+
+            return (
+                <div className="container mx-auto p-4 min-h-screen">
+                    <h1 className="text-2xl font-bold mb-4">AI Scraper</h1>
+                    
+                    {message.text && (
+                        <div className={`p-4 mb-4 rounded ${
+                            message.type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
+                        }`}>
+                            {message.text}
+                        </div>
+                    )}
+
+                    <form onSubmit={handleScrape} className="mb-4">
+                        <div className="flex gap-2">
+                            <input
+                                type="url"
+                                value={url}
+                                onChange={(e) => setUrl(e.target.value)}
+                                placeholder="Enter URL to scrape"
+                                required
+                                className="flex-1 p-2 border rounded"
+                            />
+                            <button
+                                type="submit"
+                                disabled={isLoading}
+                                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50"
+                            >
+                                {isLoading ? 'Scraping...' : 'Scrape'}
+                            </button>
+                        </div>
+                    </form>
+
+                    {content && (
+                        <form onSubmit={handleSubmit} className="h-[calc(100vh-240px)]">
+                            <div className="grid grid-cols-2 gap-4 mb-4 h-full">
+                                <textarea
+                                    value={content}
+                                    onChange={(e) => setContent(e.target.value)}
+                                    className="w-full h-full p-2 border rounded"
+                                />
+                                <div 
+                                    className="w-full h-full p-2 border rounded overflow-auto bg-gray-50 prose prose-sm max-w-none"
+                                    dangerouslySetInnerHTML={{ __html: marked.parse(content) }}
+                                />
+                            </div>
+                            <button
+                                type="submit"
+                                disabled={isLoading}
+                                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 disabled:opacity-50"
+                            >
+                                {isLoading ? 'Submitting...' : 'Submit'}
+                            </button>
+                        </form>
+                    )}
+                </div>
+            );
+        }
+
+        ReactDOM.render(<ScrapeForm />, document.getElementById('root'));
+    </script>
+    {% endraw %}
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</body>
+</html>
