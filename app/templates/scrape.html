@@ -49,7 +49,7 @@
                 setMessage({ text: '', type: '' });
 
                 try {
-                    const response = await fetch('/submit', {
+                    const response = await fetch('/api/v1/scrape', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ url, content })

@@ -1,5 +1,6 @@
 import io
 import time
+from urllib.parse import urlparse
 
 from app.core.config import settings
 from app.models.scrape_response import ScrapeResponse
@@ -21,10 +22,10 @@ class ScrapeService:
             if len(result.markdown) == 0:
                 raise ValueError("Crawler returned empty content")
 
-            self.add_file_to_assistant(result.markdown, "sample_file_1.md", settings.ASSISTANT_ID)
             return ScrapeResponse(content=result.markdown)
 
-    def add_file_to_assistant(self, file_content, filename, assistant_id):
+
+    def add_file_to_assistant(self, file_content, filename):
         file_buffer = io.BytesIO(file_content.encode() if isinstance(file_content, str) else file_content)
 
         # Upload the file content to OpenAI
