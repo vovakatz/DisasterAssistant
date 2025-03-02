@@ -3,7 +3,7 @@ from fastapi import Request, APIRouter
 
 from app.pages import templates
 
-router = APIRouter()
+router = APIRouter(prefix="/admin")
 
 @router.get("/scrape", response_class=HTMLResponse)
 async def scrape(request: Request):

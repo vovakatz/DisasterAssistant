@@ -1,6 +1,3 @@
-import os
-
-from fastapi import FastAPI
 from openai import OpenAI
 
 from app.core.config import settings

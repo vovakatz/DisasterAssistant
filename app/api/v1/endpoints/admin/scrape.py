@@ -7,7 +7,7 @@ from app.models.scrape_response import ScrapeResponse
 from app.services.scrape_service import ScrapeService
 from app.utils.url import validate_url
 
-router = APIRouter()
+router = APIRouter(prefix="/admin")
 
 
 @router.get("/scrape", response_model=ScrapeResponse)

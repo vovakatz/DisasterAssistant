@@ -1,6 +1,5 @@
 import io
 import time
-from urllib.parse import urlparse
 
 from app.core.config import settings
 from app.models.scrape_response import ScrapeResponse
